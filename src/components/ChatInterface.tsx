@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2 } from 'lucide-react';
 import { flowiseService, ChatMessage } from '@/services/flowiseService';
 
 interface Message {
@@ -92,14 +91,14 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[600px] md:h-[700px] bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+    <div className="chat-container">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="messages-area">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-gray-400">
-            <Bot className="w-16 h-16 mb-4 text-primary-500" />
-            <h2 className="text-xl font-semibold mb-2">Welcome to AI Assistant</h2>
-            <p className="text-sm max-w-md">
+          <div className="empty-state">
+            <i className="fas fa-robot empty-state-icon"></i>
+            <h2>Welcome to AI Assistant</h2>
+            <p>
               Ask me anything! I'm powered by Flowise with RAG capabilities to provide
               accurate and contextual responses.
             </p>
@@ -109,58 +108,52 @@ export default function ChatInterface() {
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex gap-3 ${
-              message.role === 'user' ? 'justify-end' : 'justify-start'
-            }`}
+            className={`message-wrapper ${message.role}`}
           >
             {message.role === 'assistant' && (
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-white" />
+              <div className="avatar assistant">
+                <i className="fas fa-robot icon icon-small"></i>
               </div>
             )}
 
-            <div
-              className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                message.role === 'user'
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
-              }`}
-            >
-              <p className="whitespace-pre-wrap break-words">{message.content}</p>
+            <div className={`message-bubble ${message.role}`}>
+              <p className="message-content">{message.content}</p>
               
               {message.sources && message.sources.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-gray-300 dark:border-gray-600">
-                  <p className="text-xs font-semibold mb-1">Sources:</p>
-                  <div className="space-y-1">
+                <div className="sources">
+                  <p className="sources-title">
+                    <i className="fas fa-sticky-note icon icon-small"></i> Sources:
+                  </p>
+                  <div>
                     {message.sources.slice(0, 3).map((source, idx) => (
-                      <div key={idx} className="text-xs opacity-75">
-                        <p className="truncate">{source.pageContent.substring(0, 100)}...</p>
+                      <div key={idx} className="source-item">
+                        <i className="fas fa-file-alt icon icon-small"></i> {source.pageContent.substring(0, 100)}...
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              <p className="text-xs opacity-70 mt-1">
+              <p className="timestamp">
                 {message.timestamp.toLocaleTimeString()}
               </p>
             </div>
 
             {message.role === 'user' && (
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                <User className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              <div className="avatar user">
+                <i className="fas fa-user icon icon-small"></i>
               </div>
             )}
           </div>
         ))}
 
         {isLoading && (
-          <div className="flex gap-3 justify-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-white" />
+          <div className="loading-wrapper">
+            <div className="avatar assistant">
+              <i className="fas fa-robot icon icon-small"></i>
             </div>
-            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg px-4 py-2">
-              <Loader2 className="w-5 h-5 animate-spin text-primary-500" />
+            <div className="loading-bubble">
+              <div className="spinner"></div>
             </div>
           </div>
         )}
@@ -170,14 +163,14 @@ export default function ChatInterface() {
 
       {/* Error Message */}
       {error && (
-        <div className="px-4 py-2 bg-red-100 dark:bg-red-900/30 border-t border-red-300 dark:border-red-700">
-          <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+        <div className="error-container">
+          <p className="error-message">{error}</p>
         </div>
       )}
 
       {/* Input Area */}
-      <div className="border-t border-gray-200 dark:border-gray-700 p-4">
-        <div className="flex gap-2">
+      <div className="input-area">
+        <div className="input-wrapper">
           <input
             ref={inputRef}
             type="text"
@@ -186,19 +179,19 @@ export default function ChatInterface() {
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
             disabled={isLoading}
-            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+            className="input-field"
           />
           <button
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
-            className="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+            className="send-button"
           >
             {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <div className="spinner"></div>
             ) : (
               <>
-                <Send className="w-5 h-5" />
-                <span className="hidden sm:inline">Send</span>
+                <i className="fas fa-paper-plane icon icon-medium"></i>
+                <span className="send-button-text">Send</span>
               </>
             )}
           </button>

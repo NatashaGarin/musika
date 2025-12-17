@@ -7,8 +7,8 @@ export default function Home() {
     <main className="main-container">
       <div className="content-wrapper">
         <div className="header">
-          <h1>AI Assistant</h1>
-          <p>Powered by Flowise RAG Chatbot</p>
+          <h1>Musika</h1>
+          <p>Your Musical Instrument Assistant</p>
         </div>
         <ChatInterface />
       </div>

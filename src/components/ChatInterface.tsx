@@ -96,11 +96,12 @@ export default function ChatInterface() {
       <div className="messages-area">
         {messages.length === 0 && (
           <div className="empty-state">
-            <i className="fas fa-robot empty-state-icon"></i>
-            <h2>Welcome to AI Assistant</h2>
+            <i className="fas fa-music empty-state-icon"></i>
+            <h2>Welcome to Musika</h2>
             <p>
-              Ask me anything! I'm powered by Flowise with RAG capabilities to provide
-              accurate and contextual responses.
+              Ask me anything about musical instruments! I can help you with instrument selection, 
+              playing techniques, maintenance tips, and music theory. Powered by Flowise with RAG capabilities 
+              to provide accurate and contextual responses.
             </p>
           </div>
         )}

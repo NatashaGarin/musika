@@ -6,8 +6,8 @@ import FontAwesomeLoader from '@/components/FontAwesomeLoader'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AI Assistant - RAG Chatbot',
-  description: 'AI-powered chatbot with RAG capabilities powered by Flowise',
+  title: 'Musika - Musical Instrument Assistant',
+  description: 'AI-powered musical instrument assistant with RAG capabilities powered by Flowise. Get expert advice on instruments, techniques, and music theory.',
 }
 
 export default function RootLayout({
